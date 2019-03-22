@@ -3,16 +3,16 @@
 int main(int argc, char const *argv[])
 {
     int n,m;
-    
+
     printf("Bienvenue dans le programme de calcul du PGCD !\n");
 
     printf("Entrez le premier nombre: ");
-    scanf("%d\n", &n);*
+    scanf("%d", &n);
 
     printf("Entrez le deuxième nombre: ");
     scanf("%d", &m);
 
-    pgcd(n,m);
+    printf("Le PGCD est de : %d\n", pgcd(n,m));
 }
 
 int pgcd(int n, int m)

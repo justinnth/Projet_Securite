@@ -10,17 +10,19 @@ int main(int argc, char const *argv[])
         scanf("%d", &n);
     } while (n <= 0);
 
-    for(int i = 2; i <= n; i++)
+    for (int i = 2; i <= n; i++)
     {
         int premier = 1;
-        for(int loop = 2; loop <= i; loop++)
+        for (int loop = 2; loop <= i; loop++)
         {
-            if ((i % loop) == 0 && loop != i) {
+            if ((i % loop) == 0 && loop != i)
+            {
                 premier = 0;
             }
         }
 
-        if (premier != 0) {
+        if (premier != 0)
+        {
             printf("%d\n", i);
         }
     }

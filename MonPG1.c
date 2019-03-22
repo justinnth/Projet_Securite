@@ -12,9 +12,10 @@ int main(int argc, char const *argv[])
     return 0;
 }
 
-int fibonnacci(int n){
+int fibonnacci(int n)
+{
     int tmp, i = 0, j = 1;
-    for(int k = 0; k < n; k++)
+    for (int k = 0; k < n; k++)
     {
         tmp = i + j;
         i = j;

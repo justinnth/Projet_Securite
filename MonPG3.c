@@ -11,7 +11,7 @@ int main(int argc, char const *argv[])
 
     j = 0;
     len = strlen(str);
-    for(i = len-1; i >= 0; i--)
+    for (i = len - 1; i >= 0; i--)
     {
         rStr[j++] = str[i];
     }

@@ -1,14 +1,15 @@
 #include <stdio.h>
+#include <string.h>
 
 int main(int argc, char const *argv[])
 {
-    string mot;
+    int n;
 
-    printf("Bienvenue dans le programme de la politesse !\n");
+    printf("Bienvenue dans le programme qui divise votre nombre par 4\n");
 
-    printf("Ecrivez bonjour, le terminal vous répondra: ");
-    if(scanf("%d\n", &mot) == "bonjour" || "Bonjour"){
-        printf("Bonjour !!!")
-    }
+    printf("Entrez un nombre :");
+    scanf("%d", &n);
+
+    printf("%d/4 = %lf", n, (float) n/4);
 }
 

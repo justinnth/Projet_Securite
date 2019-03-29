@@ -28,4 +28,4 @@ int main(int argc, char const *argv[])
 }
 
 //export PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:/usr/local/opt/libffi/lib/pkconfig"
-//gcc $(pkg-config --libs --cflags gtf+-3.0) MediaPlayer.c -o MediaPlayer
+//gcc $(pkg-config --libs --cflags gtk+-3.0) MediaPlayer.c -o MediaPlayer

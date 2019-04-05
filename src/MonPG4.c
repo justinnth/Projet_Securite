@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+int pgcd(int n, int m);
+
 int main(int argc, char const *argv[])
 {
     int n,m;

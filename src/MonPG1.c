@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+int fibonnacci(int n);
+
 int main(int argc, char const *argv[])
 {
     int n;

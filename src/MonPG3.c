@@ -7,7 +7,7 @@ int main(int argc, char const *argv[])
     int i, j, len;
     printf("Bienvenue dans le programme qui inverse votre chaine de caractères\n");
     printf("Entrez une chaine de caractères : ");
-    scanf("%s", &str);
+    scanf("%s", str);
 
     j = 0;
     len = strlen(str);

